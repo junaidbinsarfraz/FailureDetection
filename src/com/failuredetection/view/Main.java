@@ -1,24 +1,31 @@
 package com.failuredetection.view;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.failuredetection.controller.TrainingController;
 import com.failuredetection.model.Node;
 import com.failuredetection.model.TreeNode;
+import com.failuredetection.util.FileUtil;
 
 import javafx.application.Application;
-import javafx.scene.Group;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.ArcType;
+import javafx.scene.control.Button;
+import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 public class Main extends Application {
 	
 	TrainingController trainingController = new TrainingController();
 	TreeNode<Node> root = null;
+	List<String> lines = new ArrayList<String>();
 	
-	/*@Override
+	@Override
 	public void start(Stage primaryStage) throws Exception {
 		
 		Button trainingBtn = new Button("Training Mode");
@@ -48,10 +55,83 @@ public class Main extends Application {
 				// Open file chooser
 				File file = fileChooser.showOpenDialog(primaryStage);
                 if (file != null) {
-                    root = trainingController.buildTree(FileUtil.readFile(file));
+                	lines = FileUtil.readFile(file);
+                    root = trainingController.buildTree(lines);
                 }
 				
 				System.out.println("Done");
+			}
+			
+		});
+		
+		detectionBtn.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				// Open file chooser
+				File file = fileChooser.showOpenDialog(primaryStage);
+                if (file != null) {
+                	List<String> lines1 = FileUtil.readFile(file);
+                	// Match lines
+                	Boolean matched = trainingController.matchTree(lines, lines1);
+                	
+                	if(Boolean.TRUE.equals(matched)) {
+                		// Show Pass
+                		
+                		Button passBtn = new Button("Pass");
+                		passBtn.setMinHeight(100);
+                		passBtn.setMinWidth(150);
+                		passBtn.setMaxHeight(100);
+                		passBtn.setMaxWidth(150);
+                		passBtn.setPrefHeight(100);
+                		passBtn.setPrefWidth(150);
+                		passBtn.setStyle("-fx-color: green;");
+                		
+                		VBox vBox = new VBox(50);
+                		vBox.setAlignment(Pos.CENTER);
+                		vBox.getChildren().addAll(passBtn);
+                		
+                		Scene scene = new Scene(vBox);
+                		
+                		Stage stage = new Stage();
+                		
+                		primaryStage.close();
+                		
+                		stage.setTitle("Result");
+                		stage.setScene(scene);
+                		stage.setWidth(500);
+                		stage.setHeight(500);
+                		stage.show();
+                	} else {
+                		// Show Fail
+
+                		Button failBtn = new Button("Fail");
+                		failBtn.setMinHeight(100);
+                		failBtn.setMinWidth(150);
+                		failBtn.setMaxHeight(100);
+                		failBtn.setMaxWidth(150);
+                		failBtn.setPrefHeight(100);
+                		failBtn.setPrefWidth(150);
+                		failBtn.setStyle("-fx-color: red;");
+                		
+                		VBox vBox = new VBox(50);
+                		vBox.setAlignment(Pos.CENTER);
+                		vBox.getChildren().addAll(failBtn);
+                		
+                		Scene scene = new Scene(vBox);
+                		
+                		Stage stage = new Stage();
+                		
+                		primaryStage.close();
+                		
+                		stage.setTitle("Result");
+                		stage.setScene(scene);
+                		stage.setWidth(500);
+                		stage.setHeight(500);
+                		stage.show();
+                	}
+                }
+				
 			}
 			
 		});
@@ -67,42 +147,7 @@ public class Main extends Application {
 		primaryStage.setWidth(500);
 		primaryStage.setHeight(500);
 		primaryStage.show();
-	}*/
-	
-	@Override
-    public void start(Stage primaryStage) {
-        primaryStage.setTitle("Drawing Operations Test");
-        Group root = new Group();
-        Canvas canvas = new Canvas(300, 250);
-        GraphicsContext gc = canvas.getGraphicsContext2D();
-        drawShapes(gc);
-        root.getChildren().add(canvas);
-        primaryStage.setScene(new Scene(root));
-        primaryStage.show();
-    }
-
-    private void drawShapes(GraphicsContext gc) {
-        gc.setFill(Color.GREEN);
-        gc.setStroke(Color.BLUE);
-        gc.setLineWidth(5);
-        gc.strokeLine(40, 10, 10, 40);
-        gc.fillOval(10, 60, 30, 30);
-        gc.strokeOval(60, 60, 30, 30);
-        gc.fillRoundRect(110, 60, 30, 30, 10, 10);
-        gc.strokeRoundRect(160, 60, 30, 30, 10, 10);
-        gc.fillArc(10, 110, 30, 30, 45, 240, ArcType.OPEN);
-        gc.fillArc(60, 110, 30, 30, 45, 240, ArcType.CHORD);
-        gc.fillArc(110, 110, 30, 30, 45, 240, ArcType.ROUND);
-        gc.strokeArc(10, 160, 30, 30, 45, 240, ArcType.OPEN);
-        gc.strokeArc(60, 160, 30, 30, 45, 240, ArcType.CHORD);
-        gc.strokeArc(110, 160, 30, 30, 45, 240, ArcType.ROUND);
-        gc.fillPolygon(new double[]{10, 40, 10, 40},
-                       new double[]{210, 210, 240, 240}, 4);
-        gc.strokePolygon(new double[]{60, 90, 60, 90},
-                         new double[]{210, 210, 240, 240}, 4);
-        gc.strokePolyline(new double[]{110, 140, 110, 140},
-                          new double[]{210, 210, 240, 240}, 4);
-    }
+	}
 	
 	public static void main(String[] args) {
 		launch(args);

@@ -8,7 +8,7 @@ import com.failuredetection.util.Constants;
 
 public class TrainingController {
 
-	public TreeNode<Node> buildTree(List<String> lines) {
+	public TreeNode<Node> buildTree(final List<String> lines) {
 		TreeNode<Node> root = null;
 
 		Integer currentLevel = 0, index = 0;
@@ -74,6 +74,21 @@ public class TrainingController {
 		}
 
 		return root;
+	}
+	
+	public Boolean matchTree(List<String> lines1, List<String> lines2) {
+		
+		if(lines1.size() != lines2.size()) {
+			return Boolean.FALSE;
+		}
+		
+		for(int i = 0; i < lines1.size(); i++) {
+			if(!(lines1.get(i).equals(lines2.get(i)))) {
+				return Boolean.FALSE;
+			}
+		}
+		
+		return Boolean.TRUE;
 	}
 
 }
