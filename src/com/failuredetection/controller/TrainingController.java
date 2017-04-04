@@ -5,10 +5,11 @@ import java.util.List;
 import com.failuredetection.model.Node;
 import com.failuredetection.model.TreeNode;
 import com.failuredetection.util.Constants;
+import com.failuredetection.view.Main;
 
 public class TrainingController {
 
-	public TreeNode<Node> buildTree(final List<String> lines) {
+	public TreeNode<Node> buildTree(final List<String> lines, Boolean isDetectionMode) {
 		TreeNode<Node> root = null;
 
 		Integer currentLevel = 0, index = 0;
@@ -59,6 +60,18 @@ public class TrainingController {
 
 						node.setEndTime(endTime);
 						node.setExecutionTime(endTime - node.getStartTime());
+						
+						if(Boolean.TRUE.equals(isDetectionMode)) {
+							// Check if its deviating/abnormal or not
+							
+							if((new Double(node.getExecutionTime())) < (Main.mean - 2 * Main.standardDeviation) || 
+									(new Double(node.getExecutionTime())) > (Main.mean + 2 * Main.standardDeviation)) {
+								
+								return null;
+								
+							}
+							
+						}
 
 						currentNode = currentNode.getParent();
 						--currentLevel;

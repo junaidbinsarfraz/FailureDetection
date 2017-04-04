@@ -8,6 +8,7 @@ import com.failuredetection.controller.TrainingController;
 import com.failuredetection.model.Node;
 import com.failuredetection.model.TreeNode;
 import com.failuredetection.util.FileUtil;
+import com.failuredetection.util.MathUtil;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -23,7 +24,8 @@ public class Main extends Application {
 	
 	TrainingController trainingController = new TrainingController();
 	TreeNode<Node> root = null;
-	List<String> lines = new ArrayList<String>();
+	public static List<String> lines = new ArrayList<String>();
+	public static Double mean = 0.0, standardDeviation = 0.0;
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -56,7 +58,10 @@ public class Main extends Application {
 				File file = fileChooser.showOpenDialog(primaryStage);
                 if (file != null) {
                 	lines = FileUtil.readFile(file);
-                    root = trainingController.buildTree(lines);
+                    root = trainingController.buildTree(lines, Boolean.FALSE);
+                    
+                    Main.mean = MathUtil.calculateMean(root);
+                    Main.standardDeviation = MathUtil.calculateStandardDeviation(root, mean);
                 }
 				
 				System.out.println("Done");
@@ -75,7 +80,10 @@ public class Main extends Application {
                 	// Match lines
                 	Boolean matched = trainingController.matchTree(lines, lines1);
                 	
-                	if(Boolean.TRUE.equals(matched)) {
+                	// Check Mean and standard deviation
+                	TreeNode<Node> root1 = trainingController.buildTree(lines1, Boolean.TRUE);
+                	
+                	if(Boolean.TRUE.equals(matched) && root1 != null) {
                 		// Show Pass
                 		
                 		Button passBtn = new Button("Pass");
