@@ -2,18 +2,29 @@ package com.failuredetection.controller;
 
 import java.util.List;
 
+import org.abego.treelayout.TreeForTreeLayout;
+import org.abego.treelayout.util.DefaultTreeForTreeLayout;
+
 import com.failuredetection.model.Node;
 import com.failuredetection.model.TreeNode;
+import com.failuredetection.treelayout.TextInBox;
 import com.failuredetection.util.Constants;
 import com.failuredetection.view.Main;
 
 public class TrainingController {
+	
+	public static TreeForTreeLayout<TextInBox> tree;
 
 	public TreeNode<Node> buildTree(final List<String> lines, Boolean isDetectionMode) {
 		TreeNode<Node> root = null;
 
 		Integer currentLevel = 0, index = 0;
 		TreeNode<Node> currentNode = null;
+		
+		TextInBox rootBox = null;
+		TextInBox currentBox = null;
+		
+		DefaultTreeForTreeLayout<TextInBox> tree = null;
 		
 		try {
 			for (String line : lines) {
@@ -31,8 +42,12 @@ public class TrainingController {
 						node.setName(splittedStr[2]);
 
 						root = new TreeNode<Node>(node);
+						rootBox = new TextInBox(node.getName());
 
 						currentNode = root;
+						currentBox = rootBox;
+						
+						tree = new DefaultTreeForTreeLayout<TextInBox>(rootBox);
 					} else {
 						// TODO show error
 					}
@@ -48,7 +63,12 @@ public class TrainingController {
 						node.setName(splittedStr[2]);
 
 						TreeNode<Node> treeNode = new TreeNode<Node>(node);
-
+						
+						TextInBox tempTextInBox = new TextInBox(node.getName());
+						
+						tree.addChild(currentBox, tempTextInBox);
+						currentBox = tempTextInBox;
+						
 						currentNode.addChild(treeNode);
 						currentNode = treeNode;
 
@@ -74,6 +94,7 @@ public class TrainingController {
 						}
 
 						currentNode = currentNode.getParent();
+						currentBox = tree.getParent(currentBox);
 						--currentLevel;
 					}
 
@@ -83,9 +104,11 @@ public class TrainingController {
 
 			}
 		} catch (Exception e) {
+			TrainingController.tree = null;
 			return null;
 		}
-
+		
+		TrainingController.tree = tree;
 		return root;
 	}
 	

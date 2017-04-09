@@ -7,6 +7,7 @@ import java.util.List;
 import com.failuredetection.controller.TrainingController;
 import com.failuredetection.model.Node;
 import com.failuredetection.model.TreeNode;
+import com.failuredetection.treelayout.swing.SwingDemo;
 import com.failuredetection.util.FileUtil;
 import com.failuredetection.util.MathUtil;
 
@@ -59,6 +60,10 @@ public class Main extends Application {
                 if (file != null) {
                 	lines = FileUtil.readFile(file);
                     root = trainingController.buildTree(lines, Boolean.FALSE);
+                    
+                    if(TrainingController.tree != null) {
+                    	SwingDemo.buildTree();
+                    }
                     
                     Main.mean = MathUtil.calculateMean(root);
                     Main.standardDeviation = MathUtil.calculateStandardDeviation(root, mean);
