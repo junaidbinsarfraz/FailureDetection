@@ -7,7 +7,7 @@ import java.util.List;
 import com.failuredetection.controller.TrainingController;
 import com.failuredetection.model.Node;
 import com.failuredetection.model.TreeNode;
-import com.failuredetection.treelayout.swing.SwingDemo;
+import com.failuredetection.treelayout.view.SwingDemo;
 import com.failuredetection.util.FileUtil;
 import com.failuredetection.util.MathUtil;
 

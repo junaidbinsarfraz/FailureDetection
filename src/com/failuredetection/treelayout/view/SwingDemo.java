@@ -27,7 +27,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package com.failuredetection.treelayout.swing;
+package com.failuredetection.treelayout.view;
 
 import java.awt.Container;
 
@@ -40,7 +40,6 @@ import org.abego.treelayout.TreeLayout;
 import org.abego.treelayout.util.DefaultConfiguration;
 
 import com.failuredetection.controller.TrainingController;
-import com.failuredetection.treelayout.SampleTreeFactory;
 import com.failuredetection.treelayout.TextInBox;
 import com.failuredetection.treelayout.TextInBoxNodeExtentProvider;
 
@@ -69,19 +68,6 @@ public class SwingDemo {
 		dialog.pack();
 		dialog.setLocationRelativeTo(null);
 		dialog.setVisible(true);
-	}
-
-	private static TreeForTreeLayout<TextInBox> getSampleTree(String treeName) {
-		TreeForTreeLayout<TextInBox> tree;
-		if (treeName.equals("2")) {
-			tree = SampleTreeFactory.createSampleTree2();
-		} else if (treeName.equals("")) {
-			tree = SampleTreeFactory.createSampleTree();
-		} else {
-			throw new RuntimeException(String.format("Invalid tree name: '%s'",
-					treeName));
-		}
-		return tree;
 	}
 
 	/**

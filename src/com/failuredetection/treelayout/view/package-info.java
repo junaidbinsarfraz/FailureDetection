@@ -32,6 +32,6 @@
  * Demonstration how to use the {@link org.abego.treelayout.TreeLayout} to render a tree in a Swing
  * application.
  */
-package com.failuredetection.treelayout.swing;
+package com.failuredetection.treelayout.view;
 
 

@@ -27,7 +27,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package com.failuredetection.treelayout.swing;
+package com.failuredetection.treelayout.view;
 
 import java.awt.Color;
 import java.awt.Dimension;
